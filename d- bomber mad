@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int H, W, K;
+    cin >> H >> W >> K;
+
+    vector<string> S(H);
+    for (auto &s : S) cin >> s;
+
+    vector<int> row(H), col(W);
+
+    // Count bombs in every row and column
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < W; j++) {
+            if (S[i][j] == '#') {
+                row[i]++;
+                col[j]++;
+            }
+        }
+    }
+
+    // Multi-source BFS
+    vector<int> dist(H * W, -1);
+    queue<int> q;
+
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < W; j++) {
+            if (S[i][j] == '.' && row[i] == 0 && col[j] == 0) {
+                int id = i * W + j;
+                dist[id] = 0;
+                q.push(id);
+            }
+        }
+    }
+
+    int dr[] = {-1, 1, 0, 0};
+    int dc[] = {0, 0, -1, 1};
+
+    while (!q.empty()) {
+        int id = q.front();
+        q.pop();
+
+        int r = id / W;
+        int c = id % W;
+
+        if (dist[id] == K) continue;
+
+        for (int d = 0; d < 4; d++) {
+            int nr = r + dr[d];
+            int nc = c + dc[d];
+
+            if (nr < 0 || nr >= H || nc < 0 || nc >= W)
+                continue;
+
+            if (S[nr][nc] == '#')
+                continue;
+
+            int nid = nr * W + nc;
+
+            if (dist[nid] != -1)
+                continue;
+
+            dist[nid] = dist[id] + 1;
+            q.push(nid);
+        }
+    }
+
+    long long ans = 0;
+
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < W; j++) {
+            int id = i * W + j;
+
+            if (S[i][j] == '.' && dist[id] != -1)
+                ans++;
+        }
+    }
+
+    cout << ans << '\n';
+}
