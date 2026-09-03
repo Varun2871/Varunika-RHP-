@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int N, K;
+vector<int> A;
+
+void dfs(int pos, int rem) {
+    if (pos == N + 1) {
+        if (rem == 0) {
+            for (int i = 1; i <= N; i++) {
+                if (i > 1) cout << ' ';
+                cout << A[i];
+            }
+            cout << '\n';
+        }
+        return;
+    }
+
+    for (int x = 0; x * pos <= rem; x++) {
+        A[pos] = x;
+        dfs(pos + 1, rem - x * pos);
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin >> N >> K;
+
+    A.resize(N + 1);
+
+    dfs(1, K);
+
+    return 0;
+}
