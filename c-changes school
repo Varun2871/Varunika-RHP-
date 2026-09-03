@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int N, K;
+    cin >> N >> K;
+
+    vector<int> cnt(K + 1);
+
+    for (int i = 0; i < N; i++) {
+        int x;
+        cin >> x;
+        cnt[x]++;
+    }
+
+    int mx = *max_element(cnt.begin() + 1, cnt.end());
+
+    int ans = 0;
+
+    for (int i = 1; i <= K; i++) {
+        if (cnt[i] + 1 >= mx)
+            ans++;
+    }
+
+    cout << ans << '\n';
+
+    return 0;
+}
