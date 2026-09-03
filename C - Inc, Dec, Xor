@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int N, Q;
+    cin >> N >> Q;
+
+    vector<int> A(N, 0);
+
+    // cnt[p][r] = number of positive A[i] whose
+    // (A[i] + offset[p]) % 2^p == r
+    vector<vector<int>> cnt(20);
+    vector<int> offset(20);
+
+    for (int p = 1; p <= 19; p++)
+        cnt[p].resize(1 << p);
+
+    long long xr = 0;
+    int ones = 0;
+
+    while (Q--) {
+        int type;
+        cin >> type;
+
+        if (type == 1) {
+            int x;
+            cin >> x;
+            --x;
+
+            int old = A[x];
+            int nw = old + 1;
+
+            // Remove old positive value
+            if (old > 0) {
+                for (int p = 1; p <= 19; p++) {
+                    int mod = 1 << p;
+                    int r = (old + offset[p]) % mod;
+                    cnt[p][r]--;
+                }
+            }
+
+            // Add new positive value
+            for (int p = 1; p <= 19; p++) {
+                int mod = 1 << p;
+                int r = (nw + offset[p]) % mod;
+                cnt[p][r]++;
+            }
+
+            if (old == 1) ones--;
+            if (nw == 1) ones++;
+
+            A[x] = nw;
+
+            // XOR changes from old to new
+            xr ^= old;
+            xr ^= nw;
+        }
+        else {
+            // For bit (p-1), decrement toggles it iff
+            // old value is divisible by 2^p.
+            for (int p = 1; p <= 19; p++) {
+                if (cnt[p][offset[p]] & 1)
+                    xr ^= (1LL << (p - 1));
+            }
+
+            // Globally subtract 1 using a cyclic offset.
+            for (int p = 1; p <= 19; p++) {
+                int mod = 1 << p;
+                offset[p] = (offset[p] + 1) % mod;
+
+                // Values equal to 1 become 0, so remove them.
+                cnt[p][offset[p]] -= ones;
+            }
+
+            ones = 0;
+
+            cout << xr << '\n';
+            continue;
+        }
+
+        cout << xr << '\n';
+    }
+
+    return 0;
+}
