@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int A, B, Q;
+    cin >> A >> B >> Q;
+
+    vector<ll> s(A), t(B);
+
+    for (auto &x : s) cin >> x;
+    for (auto &x : t) cin >> x;
+
+    while (Q--) {
+        ll x;
+        cin >> x;
+
+        auto si = lower_bound(s.begin(), s.end(), x);
+        auto ti = lower_bound(t.begin(), t.end(), x);
+
+        ll sl = (si == s.begin() ? -1 : *prev(si));
+        ll sr = (si == s.end() ? -1 : *si);
+
+        ll tl = (ti == t.begin() ? -1 : *prev(ti));
+        ll tr = (ti == t.end() ? -1 : *ti);
+
+        ll ans = LLONG_MAX;
+
+        // shrine left, temple left
+        if (sl != -1 && tl != -1)
+            ans = min(ans, x - min(sl, tl));
+
+        // shrine right, temple right
+        if (sr != -1 && tr != -1)
+            ans = min(ans, max(sr, tr) - x);
+
+        // shrine left, temple right
+        if (sl != -1 && tr != -1)
+            ans = min(ans, (x - sl) + (tr - sl));
+
+        // shrine right, temple left
+        if (sr != -1 && tl != -1)
+            ans = min(ans, (sr - x) + (sr - tl));
+
+        cout << ans << '\n';
+    }
+
+    return 0;
+}
