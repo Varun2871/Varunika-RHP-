@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n, m;
+        cin >> n >> m;
+
+        vector<int> cnt(m + 1, 0);
+
+        for (int i = 0; i < n; ++i) {
+            int x;
+            cin >> x;
+            cnt[x]++;
+        }
+
+        // ge[x] = number of carrots with length >= x
+        vector<int> ge(m + 2, 0);
+
+        for (int x = m; x >= 1; --x) {
+            ge[x] = ge[x + 1] + cnt[x];
+        }
+
+        int ans = 0;
+
+        for (int x = 1; x <= m; ++x) {
+            // Every carrot with length >= x can give one
+            // carrot of length x.
+            int cur = ge[x];
+
+            // A carrot of length exactly 2*x can be split
+            // into TWO carrots of length x.
+            if (2 * x <= m)
+                cur += cnt[2 * x];
+
+            ans = max(ans, cur);
+        }
+
+        cout << ans << '\n';
+    }
+
+    return 0;
+}
