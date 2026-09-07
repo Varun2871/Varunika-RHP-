@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n, m;
+        cin >> n >> m;
+
+        vector<int> freq(m + 1);
+
+        ll total = 0;
+
+        for (int i = 0; i < n; ++i) {
+            int a;
+            cin >> a;
+            freq[a]++;
+            total += a;
+        }
+
+        // suf[i] = number of carrots with length >= i
+        vector<int> suf(m + 2, 0);
+
+        for (int i = m; i >= 1; --i) {
+            suf[i] = suf[i + 1] + freq[i];
+        }
+
+        vector<ll> ans(m + 1);
+
+        ll pw = 2; // 2^k
+
+        for (int k = 1; k <= m; ++k) {
+
+            // If 2^k > m, every carrot can be completely
+            // divided into unit pieces.
+            if (pw > m) {
+                for (int j = k; j <= m; ++j)
+                    ans[j] = total;
+                break;
+            }
+
+            ll best = 0;
+
+            /*
+                Target length = x.
+
+                x <= m / 2^k
+
+                Contribution:
+                    min(a/x, 2^k - 1)
+
+                We can write
+
+                    min(a/x, L-1)
+                    = sum_{j=1}^{L-1} [a >= j*x]
+
+                Therefore:
+
+                    contribution =
+                        suf[x] +
+                        suf[2x] +
+                        ...
+                        suf[(L-1)x]
+
+                For a = L*x, we need one extra piece,
+                because it gives L instead of L-1.
+            */
+
+            for (int x = 1; x * pw <= m; ++x) {
+
+                ll cur = freq[x * pw];
+
+                for (ll j = 1; j < pw; ++j) {
+                    cur += suf[j * x];
+                }
+
+                best = max(best, cur);
+            }
+
+            ans[k] = best;
+
+            pw *= 2;
+        }
+
+        for (int k = 1; k <= m; ++k) {
+            cout << ans[k] << (k == m ? '\n' : ' ');
+        }
+    }
+
+    return 0;
+}
