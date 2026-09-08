@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<int> a(n);
+        int zeros = 0;
+
+        for (int &x : a) {
+            cin >> x;
+            if (x == 0)
+                zeros++;
+        }
+
+        if (zeros == 1) {
+            cout << "NO\n";
+            continue;
+        }
+
+        cout << "YES\n";
+
+        bool firstZero = true;
+
+        for (int x : a) {
+            if (x == 0) {
+                if (firstZero) {
+                    cout << 'A';
+                    firstZero = false;
+                } else {
+                    cout << 'B';
+                }
+            } else {
+                cout << 'C';
+            }
+        }
+
+        cout << '\n';
+    }
+
+    return 0;
+}
