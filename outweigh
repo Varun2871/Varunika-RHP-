@@ -1,0 +1,15 @@
+N = int(input())
+A = list(map(int, input().split()))
+B = list(map(int, input().split()))
+
+W = [1] * N
+
+for i in range(N):
+    if A[i] > B[i]:
+        W[i] = 10**18
+
+if max(A[i] - B[i] for i in range(N)) <= 0:
+    print("No")
+else:
+    print("Yes")
+    print(*W)
