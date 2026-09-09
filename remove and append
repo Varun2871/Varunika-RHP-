@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int N, Q;
+    cin >> N >> Q;
+
+    vector<int> p(N), nxt(N + 1), prv(N + 1);
+
+    for (int &x : p) cin >> x;
+
+    for (int i = 0; i + 1 < N; i++) {
+        nxt[p[i]] = p[i + 1];
+        prv[p[i + 1]] = p[i];
+    }
+
+    int head = p[0], tail = p[N - 1];
+
+    while (Q--) {
+        int x;
+        cin >> x;
+
+        if (x == tail) continue;
+
+        int L = prv[x];
+        int R = nxt[x];
+
+        // Remove x
+        if (L) nxt[L] = R;
+        else head = R;          // x was the first element
+
+        if (R) prv[R] = L;
+
+        // Put x at the end
+        nxt[tail] = x;
+        prv[x] = tail;
+        nxt[x] = 0;
+        tail = x;
+    }
+
+    for (int x = head; x; x = nxt[x])
+        cout << x << ' ';
+
+    cout << '\n';
+}
