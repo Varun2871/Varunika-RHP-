@@ -1,0 +1,17 @@
+n = int(input())
+p = list(map(int, input().split()))
+
+last = 0
+
+for x in p:
+  group = (x - 1) // 10
+  
+  if group < last:
+    print("No")
+    break 
+  last = group
+  
+  
+else:
+  print("Yes")
+  
