@@ -1,68 +1,30 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-
-int main() {
-    int t;
-    cin >> t;
-
-    while (t--) {
-        int n;
-        cin >> n;
-
-        vector<int> a(n);
-        for (int &x : a) cin >> x;
-
-        
-        int prev = -1;
-
-        for (int i = 0; i < n; i++) {
-            if (a[i] == 1) {
-                if (prev != -1 && i - prev > R - L)
-                    L = prev, R = i;
-                prev = i;
-            }
-        }
-
-      
-        int first1 = -1, last1 = -1;
-        for (int i = 0; i < n; i++)
-            if (a[i] == 1) {
-                if (first1 == -1) first1 = i;
-                last1 = i;
-            }
-
-        if (first1 != -1) {
-            for (int i = 0; i < first1; i++)
-                if (a[i] == -1) {
-                    if (first1 - i > R - L)
-                        L = i, R = first1;
-                    break;
-                }
-
-            for (int i = n - 1; i > last1; i--)
-                if (a[i] == -1) {
-                    if (i - last1 > R - L)
-                        L = last1, R = i;
-                    break;
-                }
-        } else {
-           
-            for (int i = 0; i < n; i++)
-                if (a[i] == -1) {
-                    if (L == -1) L = i;
-                    R = i;
-                }
-        }
-
-        for (int &x : a)
-            if (x == -1) x = 0;
-
-        if (L != -1)
-            a[L] = a[R] = 1;
-
-        for (int x : a)
-            cout << x << ' ';
-
-        cout << '\n';
-    }
+void solve(){
+	int n;cin>>n;
+	vector<int>arr(n);
+	for(int i=0;i<n;i++){
+		cin>>arr[i];
+	}
+	int lt=0;int rt=n-1;
+	while(lt<n && arr[lt]==0)lt++;
+	while(rt>=0 && arr[rt]==0) rt--;
+	if(lt<=rt){
+	for(int i=lt+1;i<rt;i++){
+		if(arr[i]==-1) arr[i]=0;
+	}
+	
+	arr[lt]=1;
+	arr[rt]=1;
+	}
+	for(int i=0;i<n;i++){
+		cout<<arr[i]<<(i==n-1?"\n":" ");
+	}
+}
+int main(){
+	int q;cin>>q;
+	while(q--){
+		solve();
+	}
+	return 0;
 }
