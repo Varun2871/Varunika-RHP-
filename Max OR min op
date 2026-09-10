@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+int main()
+ 
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+ 
+    int t;
+    cin >> t;
+ 
+    while (t--) {
+        ll x, y;
+        cin >> x >> y;
+ 
+        ll s = x + y;
+        ll a = 0;
+ 
+        for (int i = 30; i >= 0; i--) {
+            if ((s >> i) & 1LL) {
+                ll nxt = a | (1LL << i);
+                if (nxt <= x)
+                    a = nxt;
+            }
+        }
+ 
+        cout << s << ' ' << x - a << '\n';
+    }
+ 
+    return 0;
+}
