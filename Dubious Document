@@ -1,0 +1,17 @@
+n = int(input())
+
+ans = [50] * 26
+
+for _ in range(n):
+    s = input()
+
+    count = [0] * 26
+
+    for c in s:
+        count[ord(c) - ord('a')] += 1
+
+    for i in range(26):
+        ans[i] = min(ans[i], count[i])
+
+for i in range(26):
+    print(chr(i + ord('a')) * ans[i], end='')
